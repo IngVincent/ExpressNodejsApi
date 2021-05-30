@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const hostname = "127.0.0.1";
 const Joi = require('@hapi/joi');
+const { ValidationError } = require('@hapi/joi');
 app.use(express.json());
 
 const fruits = [
@@ -47,10 +48,9 @@ app.post('/api/fuits', (req, res)=> {
     res.send(fruit);
 });
 function validateFruit(fruit) {
-    const schema = {
-        name: Joi.string().min(J).required()
-    };
-    return Joi.validate(fruit, schema);
+    const schema =  Joi.object({ name: Joi.string().min(3).required() });
+    const validation = schema.validate(fruit);
+    return validation;
 }
 
 
