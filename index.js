@@ -30,12 +30,30 @@ app.get('/api/fruits/:id', (req,res)=>{
     res.send(fruit);
 
 });
-function validation(fruit) {
+//create request handler
+app.post('/api/fuits', (req, res)=> {
+    const {error} = validateFruit(req.body);
+    if(error)
+    {
+        res.status(400).send(error.details[0].message)
+        return;
+    }
+    const fruit =
+    {
+    id: fruits.length + 1,
+    name: req.body.name
+    };
+    fruits.push(fruit);
+    res.send(fruit);
+});
+function validateFruit(fruit) {
     const schema = {
         name: Joi.string().min(J).required()
     };
     return Joi.validate(fruit, schema);
 }
+
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
